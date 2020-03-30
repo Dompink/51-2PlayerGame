@@ -13,4 +13,4 @@
 
 ****
 附海报一枚：  
-<img src="https://github.com/Dompink/51-2PlayerGame/blob/master/%E5%AE%A3%E4%BC%A0%E6%B5%B7%E6%8A%A5.jpg" class="aligncenter"  alt="GitHub" width="500" height="700" />
+<div align="center"><img src="https://github.com/Dompink/51-2PlayerGame/blob/master/%E5%AE%A3%E4%BC%A0%E6%B5%B7%E6%8A%A5.jpg" alt="宣传海报" width="500" height="700" />
