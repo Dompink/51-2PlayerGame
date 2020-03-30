@@ -1,8 +1,7 @@
 # 51-2PlayerGame  
- 
  游戏名称：中路对狙  
  作者：Dompink及其他中路对狙小组成员    
- 软件：Keil uVision5
+ 软件：Keil uVision5  
  语言：C  
  开发板：普中科技V2.2（可能是，版本记不太清了）  
  芯片：AT89C52   
