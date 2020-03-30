@@ -11,4 +11,4 @@
  *普中科技有一些开发板可能因为批次更换芯片的原因，不能用旧普中科技烧录器烧录，需要使用新烧录器，芯片选STC89Cxx(New)即可烧录成功*  
 
 附海报一枚：  
-
+<img src="https://github.com/Dompink/51-2PlayerGame/blob/master/%E5%AE%A3%E4%BC%A0%E6%B5%B7%E6%8A%A5.jpg" alt="GitHub" title="GitHub,Social Coding" width="50" height="50" />
