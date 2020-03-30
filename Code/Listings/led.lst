@@ -1,0 +1,121 @@
+C51 COMPILER V9.54   LED                                                                   03/30/2020 20:20:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE LED
+OBJECT MODULE PLACED IN .\Objects\led.obj
+COMPILER INVOKED BY: E:\c51\C51\BIN\C51.EXE led.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\led.lst) 
+                    -TABS(2) OBJECT(.\Objects\led.obj)
+
+line level    source
+
+   1          #include<led.h>
+   2          #include<time.h>
+   3          #include<reg51.h>
+   4          #include<intrins.h>
+   5          /*******************************************************************************
+   6          * 函数名         : Hc595SendByte(unsigned char dat)
+   7          * 函数功能       : 点亮某列某几行的LED点阵
+   8          * 输入           : 
+   9          * 输出           : 
+  10          *******************************************************************************/
+  11          
+  12          void Hc595SendByte(unsigned char whatever)
+  13          {
+  14   1        unsigned char a;
+  15   1        SRCLK=0;
+  16   1        RCLK=0;
+  17   1        for(a=0;a<8;a++)
+  18   1        {
+  19   2          SER=whatever>>7;
+  20   2          whatever<<=1;
+  21   2          SRCLK=1;
+  22   2          _nop_();
+  23   2          _nop_();
+  24   2          SRCLK=0;  
+  25   2        }
+  26   1        RCLK=1;
+  27   1        _nop_();
+  28   1        _nop_();
+  29   1        RCLK=0;
+  30   1      }
+  31          /*******************************************************************************
+  32          * 函数名         : LED_Show
+  33          * 函数功能       : 使LED点阵显示所需图像
+  34          * 输入           : 四个点的XY坐标
+  35          * 输出           : 
+  36          *******************************************************************************/
+  37          
+  38          unsigned char tab;
+  39          //显示玩家1胜利图像//
+  40          unsigned char code A_win[8]={0x00,0x00,0x00,0x00,0x21,0x7f,0x01,0x00};
+  41          //显示玩家2胜利图像//
+  42          unsigned char code B_win[8]={0x00,0x00,0x27,0x45,0x45,0x45,0x39,0x00};
+  43          //列选通控制//
+  44          unsigned char code T[8] = {0x7f,0xbf,0xdf,0xef,0xf7,0xfb,0xfd,0xfe};
+  45          //行选通控制//
+  46          unsigned char code ROW_value[8] = {0x01,0x02,0x04,0x08,0x10,0x20,0x40,0x80};
+  47          
+  48          
+  49          void LED_Show(unsigned char x1,y1,x2,y2,x3,y3,x4,y4){
+  50   1      
+  51   1      //初始化
+  52   1      unsigned char CHARCODE[8]= {0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00};
+  53   1      //使（X，Y）  点置为1
+  54   1      if(x1!=0 && y1!=0){CHARCODE[x1-1]+=ROW_value[y1-1];}
+C51 COMPILER V9.54   LED                                                                   03/30/2020 20:20:30 PAGE 2   
+
+  55   1      if(x2!=0 && y2!=0){CHARCODE[x2-1]+=ROW_value[y2-1];}
+  56   1      if(x3!=0 && y3!=0){CHARCODE[x3-1]+=ROW_value[y3-1];}
+  57   1      if(x4!=0 && y4!=0){CHARCODE[x4-1]+=ROW_value[y4-1];}
+  58   1      //点亮图案
+  59   1      for(tab=0;tab<8;tab++)
+  60   1            { 
+  61   2              Hc595SendByte(0x00);
+  62   2              COMMONPORTS = T[tab];
+  63   2              Hc595SendByte(CHARCODE[tab]); 
+  64   2            }
+  65   1      }
+  66          
+  67          unsigned int  i;
+  68          
+  69          void Awin(){
+  70   1        for(i= 0; i<50; i++ )   //闪烁50次
+  71   1          {
+  72   2      for(tab=0;tab<8;tab++)
+  73   2            { 
+  74   3              Hc595SendByte(0x00);
+  75   3              COMMONPORTS = T[tab];
+  76   3              Hc595SendByte(A_win[tab]);
+  77   3              Delay1ms(10); //闪
+  78   3            }
+  79   2      }
+  80   1          }
+  81          
+  82          void Bwin(){
+  83   1        for(i= 0; i<50; i++ )   //
+  84   1          {
+  85   2      for(tab=0;tab<8;tab++)
+  86   2            { 
+  87   3              Hc595SendByte(0x00);
+  88   3              COMMONPORTS = T[tab];
+  89   3              Hc595SendByte(B_win[tab]);
+  90   3              Delay1ms(10);       
+  91   3            }
+  92   2      }
+  93   1          }
+  94          
+  95          
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    371    ----
+   CONSTANT SIZE    =     40    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =      3      23
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
