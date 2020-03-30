@@ -1,0 +1,9 @@
+".\Objects\STARTUP.obj",
+".\Objects\main.obj",
+".\Objects\time.obj",
+".\Objects\bgm2.obj",
+".\Objects\bgm1.obj",
+".\Objects\led.obj",
+".\Objects\button.obj" 
+TO ".\Objects\Game" 
+PRINT(".\Listings\Game.m51") RAMSIZE(256) 
