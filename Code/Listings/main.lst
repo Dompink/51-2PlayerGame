@@ -1,0 +1,151 @@
+C51 COMPILER V9.54   MAIN                                                                  03/30/2020 20:20:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE MAIN
+OBJECT MODULE PLACED IN .\Objects\main.obj
+COMPILER INVOKED BY: E:\c51\C51\BIN\C51.EXE main.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\main.lst
+                    -) TABS(2) OBJECT(.\Objects\main.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          * 实 验 名    双人大战游戏   
+   3          * 作者      Group   
+   4          * 实验效果   A，B玩家移动互射，并在结束后播放bgm    
+   5          * 注    意     
+   6          *******************************************************************************/
+   7          #include<reg51.h>
+   8          #include<intrins.h>
+   9          #include<time.h>
+  10          #include<bgm1.h>
+  11          #include<bgm2.h>
+  12          #include<led.h>
+  13          #include<button.h>
+  14          
+  15          
+  16          /*******************************************************************************
+  17          * 函 数 名         : main
+  18          * 函数功能         : 主函数
+  19          * 输    入         : 无
+  20          * 输    出         : 无
+  21          *******************************************************************************/
+  22          //定义参数
+  23          unsigned char AL,AR,AF,BL,BR,BF;
+  24          unsigned char LA,LB,AU,BU,SA,SB;
+  25          unsigned char nA,nB,LAX,LAY,LBX,LBY;
+  26          unsigned char E,winner;
+  27          unsigned char n_min,n_step;
+  28          //主程序
+  29          void main(void)
+  30          {
+  31   1        //初始化参量
+  32   1        LA=4;LB=5;   //初始位置 
+  33   1        AU=BU=100;   //操作状态
+  34   1        SA=SB=0;     //子弹状态
+  35   1        LAX=LAY=LBX=LBY=0;   //子弹位置
+  36   1        n_min=50;        //左右移动允许间隔
+  37   1        n_step=4;    //子弹移动周期
+  38   1        nA=nB=0;     //子弹标记参量
+  39   1        E=winner=0;     //胜利者置为0
+  40   1        //未决出胜负前一直循环
+  41   1      while (E==0){
+  42   2        //操作标置参量+1/初始化 
+  43   2        AU++;BU++;
+  44   2        AL=AR=AF=BL=BR=BF=0;
+  45   2        //按键扫描并对各参量赋值
+  46   2      switch(KeyDown()+1){
+  47   3        case(5):AL=1;break;
+  48   3        case(13):AR=1;break;
+  49   3        case(9):AF=1;break;
+  50   3        case(8):BR=1;break;
+  51   3        case(12):BF=1;break;
+  52   3        case(16):BL=1;break;
+  53   3        }
+  54   2      
+C51 COMPILER V9.54   MAIN                                                                  03/30/2020 20:20:30 PAGE 2   
+
+  55   2        if ( (AL == 1) && (AU>= n_min) ) {      //A往左移动一格
+  56   3        AU=0;  LA++;
+  57   3        }
+  58   2        
+  59   2        if ( (AR == 1) && (AU>= n_min) ) {      //A往右移动一格
+  60   3        AU=0;  LA--;
+  61   3        }
+  62   2      
+  63   2        if ( (BL == 1) && (BU>= n_min) ) {      //B往左移动一格
+  64   3        BU=0;  LB--;
+  65   3        }
+  66   2        
+  67   2        if ( (BR == 1) && (BU>= n_min) ) {      //B往右移动一格
+  68   3        BU=0;  LB++;
+  69   3        }
+  70   2      
+  71   2        if (LA==9 || LA==0) {winner=2; E=1;break;}   //A移出场外，B获胜
+  72   2        if (LB==9 || LB==0) {winner=1; E=1;break;}   //B移出场外，B获胜
+  73   2        
+  74   2        if (AF==1 && SA==0) {
+  75   3        SA++; //A开火
+  76   3        LAX = 2; LAY = LA;  //A子弹位置
+  77   3      }
+  78   2      
+  79   2        if (BF==1 && SB==0) {
+  80   3        SB++; //B开火
+  81   3        LBX = 7; LBY = LB;  //B子弹位置
+  82   3      }
+  83   2      
+  84   2      if (SA!=0){
+  85   3        if(SA==7 && LAY==LB) {E=1;winner=1;SA=0;nA=0;break;};   //A击中B,A赢
+  86   3        if(nA==n_step){   //需要移动
+  87   4          nA=0; //重置nA
+  88   4          if(SA==7){ SA=0;LAX=0;LAY=0;}   //未击中
+  89   4          else {SA++;LAX++;} //未移动到边 继续移动
+  90   4          }
+  91   3        else {nA++;}  //
+  92   3        }
+  93   2      
+  94   2      if (SB!=0){
+  95   3        if(SB==7 && LBY==LA) {E=1;winner=2;SB=0;nB=0;break;};
+  96   3        if(nB==n_step){  
+  97   4          nB=0; 
+  98   4          if(SB==7){ SB=0;LBX=0;LBY=0;}   
+  99   4          else {SB++;LBX--;} 
+ 100   4          }
+ 101   3        else {nB++;}  
+ 102   3        }
+ 103   2      
+ 104   2      //显示点阵图案
+ 105   2      LED_Show(1,LA,8,LB,LAX,LAY,LBX,LBY);
+ 106   2      }
+ 107   1      //展示A胜利
+ 108   1      if(winner==1)
+ 109   1      {
+ 110   2       Awin();
+ 111   2       bgm1main();
+ 112   2      }
+ 113   1      
+ 114   1      if(winner==2)
+ 115   1      {
+ 116   2       Bwin();
+C51 COMPILER V9.54   MAIN                                                                  03/30/2020 20:20:30 PAGE 3   
+
+ 117   2       bgm1main();
+ 118   2      } 
+ 119   1      
+ 120   1      //死循环
+ 121   1      while(E==1){
+ 122   2        }
+ 123   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =    440    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =     22    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
