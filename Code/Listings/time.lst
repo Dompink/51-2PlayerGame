@@ -1,0 +1,46 @@
+C51 COMPILER V9.54   TIME                                                                  03/30/2020 20:20:30 PAGE 1   
+
+
+C51 COMPILER V9.54, COMPILATION OF MODULE TIME
+OBJECT MODULE PLACED IN .\Objects\time.obj
+COMPILER INVOKED BY: E:\c51\C51\BIN\C51.EXE time.c OPTIMIZE(8,SPEED) BROWSE DEBUG OBJECTEXTEND PRINT(.\Listings\time.lst
+                    -) TABS(2) OBJECT(.\Objects\time.obj)
+
+line level    source
+
+   1          /*******************************************************************************
+   2          * 函数名         : Delay10ms(void)
+   3          * 函数功能       : 延迟10ms
+   4          * 输入           : 无
+   5          * 输出           : 无
+   6          *******************************************************************************/
+   7          
+   8          #include<time.h>
+   9          void Delay10ms(void)   //误差 0us
+  10          {
+  11   1          unsigned char a,b,c;
+  12   1          for(c=1;c>0;c--)
+  13   1              for(b=38;b>0;b--)
+  14   1                  for(a=130;a>0;a--);
+  15   1      }
+  16          
+  17          void Delay1ms(unsigned int a)
+  18          {
+  19   1        unsigned int b,c;
+  20   1        for(c=a;c>0;c--)
+  21   1          for(b=110;b>0;b--);
+  22   1      }
+
+
+MODULE INFORMATION:   STATIC OVERLAYABLE
+   CODE SIZE        =     43    ----
+   CONSTANT SIZE    =   ----    ----
+   XDATA SIZE       =   ----    ----
+   PDATA SIZE       =   ----    ----
+   DATA SIZE        =   ----    ----
+   IDATA SIZE       =   ----    ----
+   BIT SIZE         =   ----    ----
+END OF MODULE INFORMATION.
+
+
+C51 COMPILATION COMPLETE.  0 WARNING(S),  0 ERROR(S)
